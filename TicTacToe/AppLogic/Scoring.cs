@@ -117,8 +117,8 @@ namespace AppLogic
                     }
                     if (player == "O")
                     {
-                        oWinsH1.Add(1);
-                        oWinsV1.Add(1);
+                        oWinsH2.Add(1);
+                        oWinsV3.Add(1);
                     }
                     break;
                 case 7:

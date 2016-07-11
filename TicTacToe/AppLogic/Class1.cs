@@ -13,9 +13,8 @@ namespace AppLogic
     {
 
         Scoring Score = new Scoring();
-       
-        
         bool gameContinue = true;
+        int moveCounter = 0;
         //board set up
         public string[] board = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public bool[] moveAvailable = new bool[] { true, true, true, true, true, true, true, true, true };
@@ -27,12 +26,17 @@ namespace AppLogic
 
             for (var i = 0;  gameContinue; i++)
             {
-                if (i%2 == 0)
+                if (moveCounter == 9)
+                {
+                    Console.WriteLine("Cat Game");
+                    Console.ReadLine();
+                }
+                else if (i%2 == 0)
                 {
                     xPrompt();
                     PrintGameBoard(); 
                 }
-                if (i % 2 == 1)
+                else if (i % 2 == 1)
                 {
                     oPrompt();
                     PrintGameBoard();
@@ -87,6 +91,7 @@ namespace AppLogic
                     board[cell - 1] = "X";
                     moveAvailable[cell - 1] = false;
                     Score.TallyScore(cell, "X");
+                    moveCounter += 1;
                     if (Score.xWins())
                     {
                         gameContinue = false;
@@ -120,6 +125,7 @@ namespace AppLogic
                     board[cell - 1] = "O";
                     moveAvailable[cell - 1] = false;
                     Score.TallyScore(cell, "O");
+                    moveCounter += 1;
                     if (Score.oWins())
                     {
                         gameContinue = false;
