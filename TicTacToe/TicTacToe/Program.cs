@@ -13,8 +13,7 @@ namespace TicTacToe
         {
             var game = new Game();
             game.PlayGame();
-            
-            Console.ReadLine();
+
         }
     }
 }
