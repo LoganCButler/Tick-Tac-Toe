@@ -11,7 +11,7 @@ namespace AppLogic
 
     public class Game
     {
-
+        AI computer = new AI();
         Scoring Score = new Scoring();
         bool gameContinue = true;
         int moveCounter = 0;
@@ -69,17 +69,9 @@ namespace AppLogic
 
         private void oPrompt()
         {
-            try
-            {
-                Console.WriteLine("Enter a cell to place an O");
-                oMove(Convert.ToInt16(Console.ReadLine()));
-            }
-            catch (Exception)
-            {
-
-                Console.WriteLine("Please only enter in numbers.");
-                oPrompt();
-            }
+            Console.WriteLine("The Computer will now play it's move.");
+            oMove(computer.GetComputerMove(moveAvailable));
+            
         }
 
         public void xMove(int cell)

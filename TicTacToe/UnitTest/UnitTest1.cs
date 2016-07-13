@@ -13,9 +13,6 @@ namespace UnitTest
             //Set up
             var game = new Game();
             
-
-
-
             //run
             game.xMove(1);
             game.oMove(4);
