@@ -11,7 +11,7 @@ namespace UnitTest
         public void xWins()
         {
             //Set up
-            var game = new Game();
+            var game = GameManager.GameInstance;
             
             //run
             game.xMove(1);
@@ -21,9 +21,23 @@ namespace UnitTest
             game.xMove(3);
 
             //Assert
-            // output x wins
-            
-
         }
+        //[TestMethod]
+        //public void ComputerPlaysAWinningMove()
+        //{
+        //    //Set up
+        //    var game = GameManager.GameInstance;
+
+        //    //run
+        //    game.xMove(1);
+        //    game.oMove(4);
+        //    game.xMove(2);
+        //    game.oMove(5);
+        //    game.xMove(7);
+        //    game.oPrompt();
+
+        //    //Assert
+        //    Assert.AreEqual(3, GameManager.ScoreInstance.oWinsH2.Count);
+        //}
     }
 }

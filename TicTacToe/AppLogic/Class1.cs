@@ -67,7 +67,7 @@ namespace AppLogic
             }
         }
 
-        private void oPrompt()
+        public void oPrompt()
         {
             Console.WriteLine("The Computer will now play it's move.");
             oMove(GameManager.AIInstance.GetComputerMove(moveAvailable));

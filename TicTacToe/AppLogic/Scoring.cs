@@ -27,7 +27,7 @@ namespace AppLogic
 
         //O  horizontal win
         List<int> oWinsH1 = new List<int>();
-        List<int> oWinsH2 = new List<int>();
+        List<int> oWinsH2 = new List<int>(); 
         List<int> oWinsH3 = new List<int>();
 
         //O Vertical win

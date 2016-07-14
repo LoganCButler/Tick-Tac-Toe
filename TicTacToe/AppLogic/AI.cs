@@ -10,86 +10,136 @@ namespace AppLogic
     {
         bool[] currentBoardPosibilities;
         //bool nextMoveWins=false;
-        int computerPlay;
-        int winningCell;
+        int cellToMakeMoveIn;
 
         public int GetComputerMove(bool[] board)
         {
             currentBoardPosibilities = board;
-            
-            if (CheckForNextMoveWins())
-            {
-                MakeWinningMove();
-            }
-            else
-            {
-                GetComputerRandomPlay();
-            }
-            
-            return computerPlay;
-       }
+            GetComputerRandomPlay();
+            CheckForForcedBlockingMove();
+            CheckForNextMoveWinsAndSetBestMove();
 
-        private void MakeWinningMove()
-        {
-            GameManager.GameInstance.oMove(winningCell+1); //cells are zero bassed and bard is ones based
+            return cellToMakeMoveIn + 1;
         }
 
-        private bool CheckForNextMoveWins()
+
+        //private void GetBestMoveToMake()
+        //{
+        //    GameManager.GameInstance.oMove(cellToMakeMoveIn+1); //cells are zero bassed and board is ones based
+        //}
+
+        private bool CheckForNextMoveWinsAndSetBestMove()
         {       
-            bool IsPossible = false;
+            bool winIsPossible = false;
 
             for (var i = 0; i < 8; i++)
             {
                 if (GameManager.ScoreInstance.ReturnTallyList("O")[i].Count() > 1 && GameManager.ScoreInstance.ReturnTallyList("X")[i].Count() < 1)
                 {
-                    IsPossible = true;
+                    winIsPossible = true;
                     switch (i)
                     {
                         case 0: // H1 
-                            if (GameManager.GameInstance.moveAvailable[0]) { winningCell = 0; }
-                            if (GameManager.GameInstance.moveAvailable[1]) { winningCell = 1; }
-                            if (GameManager.GameInstance.moveAvailable[2]) { winningCell = 2; }
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
                             break;
                         case 1: //H2
-                            if (GameManager.GameInstance.moveAvailable[3]) { winningCell = 3; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { winningCell = 4; }
-                            if (GameManager.GameInstance.moveAvailable[5]) { winningCell = 5; }
+                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
                             break;
                         case 2: //H3
-                            if (GameManager.GameInstance.moveAvailable[6]) { winningCell = 6; }
-                            if (GameManager.GameInstance.moveAvailable[7]) { winningCell = 7; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { winningCell = 8; }
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
                             break;
                         case 3: //V1
-                            if (GameManager.GameInstance.moveAvailable[0]) { winningCell = 0; }
-                            if (GameManager.GameInstance.moveAvailable[3]) { winningCell = 3; }
-                            if (GameManager.GameInstance.moveAvailable[6]) { winningCell = 6; }
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
                             break;
                         case 4: //V2
-                            if (GameManager.GameInstance.moveAvailable[1]) { winningCell = 1; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { winningCell = 4; }
-                            if (GameManager.GameInstance.moveAvailable[7]) { winningCell = 7; }
+                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
                             break;
                         case 5: //V3
-                            if (GameManager.GameInstance.moveAvailable[2]) { winningCell = 2; }
-                            if (GameManager.GameInstance.moveAvailable[5]) { winningCell = 5; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { winningCell = 8; }
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
                             break;
                         case 6: //DNeg
-                            if (GameManager.GameInstance.moveAvailable[0]) { winningCell = 0; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { winningCell = 4; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { winningCell = 8; }
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
                             break;
                         case 7: //DNeg
-                            if (GameManager.GameInstance.moveAvailable[2]) { winningCell = 2; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { winningCell = 4; }
-                            if (GameManager.GameInstance.moveAvailable[6]) { winningCell = 6; }
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
                             break;
                     }
                 } 
             }
-            return IsPossible;
+            return winIsPossible;
     }
+        private bool CheckForForcedBlockingMove()
+        {
+            bool BlockIsForced = false;
+
+            for (var i = 0; i < 8; i++)
+            {
+                if (GameManager.ScoreInstance.ReturnTallyList("X")[i].Count() > 1 && GameManager.ScoreInstance.ReturnTallyList("O")[i].Count() < 1)
+                {
+                    BlockIsForced = true;
+                    switch (i)
+                    {
+                        case 0: // H1 
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+                            break;
+                        case 1: //H2
+                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
+                            break;
+                        case 2: //H3
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+                            break;
+                        case 3: //V1
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+                            break;
+                        case 4: //V2
+                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
+                            break;
+                        case 5: //V3
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+                            break;
+                        case 6: //DNeg
+                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+                            break;
+                        case 7: //DNeg
+                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+                            break;
+                    }
+                }
+            }
+            return BlockIsForced;
+        }
 
         public void GetComputerRandomPlay()
         {
@@ -100,7 +150,7 @@ namespace AppLogic
                 int attempt = R.Next(0, 8);
                 if (currentBoardPosibilities[attempt])
                 {
-                    computerPlay = attempt + 1;
+                    cellToMakeMoveIn = attempt;
                     tryAgain = false;
                 }               
             }
