@@ -29,13 +29,11 @@ namespace AppLogic
                 }
                 else if (i%2 == 0)
                 {
-                    //xPrompt();
                     playPrompt("X");
                     PrintGameBoard(); 
                 }
                 else if (i % 2 == 1)
                 {
-                    //oPrompt();
                     playPrompt("O");
                     PrintGameBoard();
                 }
