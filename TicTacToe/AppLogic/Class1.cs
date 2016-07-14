@@ -70,7 +70,7 @@ namespace AppLogic
         public void oPrompt()
         {
             Console.WriteLine("The Computer will now play it's move.");
-            oMove(GameManager.AIInstance.GetComputerMove(moveAvailable));
+            oMove(GameManager.AIInstance.GetComputerMove(moveAvailable,"O","X"));
             
         }
 
