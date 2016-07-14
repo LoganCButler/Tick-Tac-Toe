@@ -15,7 +15,7 @@ namespace AppLogic
         {
             currentBoardPosibilities = board;
             GetRandomPlayAndSetIt();
-            //CheckAndSetNextMove("planning", playerLetter, oponentLetter);
+            CheckAndSetNextMove("planning", playerLetter, oponentLetter);
             CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
             CheckAndSetNextMove("offence", playerLetter, oponentLetter);
 
@@ -26,22 +26,31 @@ namespace AppLogic
         {
             string v1 ="";
             string v2 ="";
+            int v3 = 0;
 
             switch (strategy)
             {
                 case "offence":
                     v1 = playerLetter;
                     v2 = oponentLetter;
+                    v3 = 1;
+                    break;
+                case "planning":
+                    v1 = playerLetter;
+                    v2 = oponentLetter;
+                    v3 = 0;
                     break;
                 case "deffence":
                     v1 = oponentLetter;
                     v2 = playerLetter;
+                    v3 = 1;
                     break;
+                
             }
 
             for (var i = 0; i < 8; i++)
             {
-                if (GameManager.ScoreInstance.ReturnTallyList(v1)[i].Count() > 1 && GameManager.ScoreInstance.ReturnTallyList(v2)[i].Count() < 1)
+                if (GameManager.ScoreInstance.ReturnTallyList(v1)[i].Count() > v3 && GameManager.ScoreInstance.ReturnTallyList(v2)[i].Count() == 0)
                 {
                     switch (i)
                     {
