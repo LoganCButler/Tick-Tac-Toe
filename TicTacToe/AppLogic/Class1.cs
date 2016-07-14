@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace AppLogic
 {
 
@@ -11,13 +12,12 @@ namespace AppLogic
 
     public class Game
     {
-        AI computer = new AI();
-        Scoring Score = new Scoring();
         bool gameContinue = true;
         int moveCounter = 0;
         //board set up
         public string[] board = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public bool[] moveAvailable = new bool[] { true, true, true, true, true, true, true, true, true };
+
 
         public void PlayGame()
         {
@@ -70,7 +70,7 @@ namespace AppLogic
         private void oPrompt()
         {
             Console.WriteLine("The Computer will now play it's move.");
-            oMove(computer.GetComputerMove(moveAvailable));
+            oMove(GameManager.AIInstance.GetComputerMove(moveAvailable));
             
         }
 
@@ -82,9 +82,9 @@ namespace AppLogic
                 {
                     board[cell - 1] = "X";
                     moveAvailable[cell - 1] = false;
-                    Score.TallyScore(cell, "X");
+                    GameManager.ScoreInstance.TallyScore(cell, "X");
                     moveCounter += 1;
-                    if (Score.xWins())
+                    if (GameManager.ScoreInstance.xWins())
                     {
                         gameContinue = false;
                         Console.WriteLine("X Wins!");
@@ -116,9 +116,9 @@ namespace AppLogic
                 {
                     board[cell - 1] = "O";
                     moveAvailable[cell - 1] = false;
-                    Score.TallyScore(cell, "O");
+                    GameManager.ScoreInstance.TallyScore(cell, "O");
                     moveCounter += 1;
-                    if (Score.oWins())
+                    if (GameManager.ScoreInstance.oWins())
                     {
                         gameContinue = false;
                         Console.WriteLine("O Wins!");

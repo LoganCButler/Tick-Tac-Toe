@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace AppLogic
 {
+    
+
     public class Scoring
     {
         //X  horizontal win
-        List<int> xWinsH1 = new List<int>();
-        List<int> xWinsH2 = new List<int>();
-        List<int> xWinsH3 = new List<int>();
+        public List<int> xWinsH1 = new List<int>();
+        public List<int> xWinsH2 = new List<int>();
+        public List<int> xWinsH3 = new List<int>();
 
         //X Vertical win
         List<int> xWinsV1 = new List<int>();
@@ -34,8 +36,48 @@ namespace AppLogic
         List<int> oWinsV3 = new List<int>();
 
         //O Diagonal win
-        List<int> oWinsDNeg = new List<int>();
+        List<int> oWinsDNeg = new List<int>(); 
         List<int> oWinsDPos = new List<int>();
+
+        //List of Tally List
+        public List<List<int>> ReturnTallyList(string player)
+        {
+            switch (player)
+            {
+                case "X":
+                List<List<int>> xTallyLists = new List<List<int>>();
+                    xTallyLists.Add(xWinsH1);
+                    xTallyLists.Add(xWinsH2);
+                    xTallyLists.Add(xWinsH3);
+                    xTallyLists.Add(xWinsV1);
+                    xTallyLists.Add(xWinsV2);
+                    xTallyLists.Add(xWinsV3);
+                    xTallyLists.Add(xWinsDNeg);
+                    xTallyLists.Add(xWinsDPos);
+                    return xTallyLists;
+                case "O":
+                    List<List<int>> oTallyLists = new List<List<int>>();
+                    oTallyLists.Add(oWinsH1);
+                    oTallyLists.Add(oWinsH2);
+                    oTallyLists.Add(oWinsH3);
+                    oTallyLists.Add(oWinsV1);
+                    oTallyLists.Add(oWinsV2);
+                    oTallyLists.Add(oWinsV3);
+                    oTallyLists.Add(oWinsDNeg);
+                    oTallyLists.Add(oWinsDPos);
+                    return oTallyLists;
+                default:
+                    break;
+            }
+            return null;  
+        }
+        
+        
+        
+        
+        
+
+        
 
         public void TallyScore(int cell, string player)
         {
