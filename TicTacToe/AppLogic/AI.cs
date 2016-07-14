@@ -15,17 +15,17 @@ namespace AppLogic
         {
             currentBoardPosibilities = board;
             GetRandomPlayAndSetIt();
+            //CheckAndSetNextMove("planning", playerLetter, oponentLetter);
             CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
             CheckAndSetNextMove("offence", playerLetter, oponentLetter);
 
             return cellToMakeMoveIn + 1;
         }
 
-        private bool CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
+        private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
         {
-            bool outcome = false;
-            string v1;
-            string v2;
+            string v1 ="";
+            string v2 ="";
 
             switch (strategy)
             {
@@ -41,9 +41,8 @@ namespace AppLogic
 
             for (var i = 0; i < 8; i++)
             {
-                if (GameManager.ScoreInstance.ReturnTallyList("X")[i].Count() > 1 && GameManager.ScoreInstance.ReturnTallyList("O")[i].Count() < 1)
+                if (GameManager.ScoreInstance.ReturnTallyList(v1)[i].Count() > 1 && GameManager.ScoreInstance.ReturnTallyList(v2)[i].Count() < 1)
                 {
-                    outcome = true;
                     switch (i)
                     {
                         case 0: // H1 
@@ -89,7 +88,7 @@ namespace AppLogic
                     }
                 }
             }
-            return outcome;
+          
         }
 
         public void GetRandomPlayAndSetIt()
