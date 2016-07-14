@@ -4,40 +4,48 @@ using AppLogic;
 
 namespace UnitTest
 {
-    //[TestClass]
-    //public class UnitTest1
-    //{
-    //    [TestMethod]
-    //    public void xWins()
-    //    {
-    //        //Set up
-    //        var game = GameManager.GameInstance;
-            
-    //        //run
-    //        game.xMove(1);
-    //        game.oMove(4);
-    //        game.xMove(2);
-    //        game.oMove(5);
-    //        game.xMove(3);
+    [TestClass]
+    public class UnitTest1
+    {
+        [TestMethod]
+        public void xWins()
+        {
+            //Set up
+            var game = GameManager.GameInstance;
+            var score = GameManager.ScoreInstance;
 
-    //        //Assert
-    //    }
-        //[TestMethod]
-        //public void ComputerPlaysAWinningMove()
-        //{
-        //    //Set up
-        //    var game = GameManager.GameInstance;
+            //run
+            game.playMakeMove(1, "X");
+            game.playMakeMove(4, "O");
+            game.playMakeMove(2, "X");
+            game.playMakeMove(5, "O");
+            game.playMakeMove(3, "X");
 
-        //    //run
-        //    game.xMove(1);
-        //    game.oMove(4);
-        //    game.xMove(2);
-        //    game.oMove(5);
-        //    game.xMove(7);
-        //    game.oPrompt();
+            //Assert
+            Assert.IsTrue(score.CheckForPlayerWin("X"));
+            Assert.IsFalse(score.CheckForPlayerWin("O"));
+        }
+        [TestMethod]
+        public void ComputerPlaysAWinningMove()
+        {
+            //Set up
+            var game = GameManager.GameInstance;
+            var score = GameManager.ScoreInstance;
+            var AI = GameManager.AIInstance;
 
-        //    //Assert
-        //    Assert.AreEqual(3, GameManager.ScoreInstance.oWinsH2.Count);
-        //}
-    //}
+            //run
+            game.playMakeMove(1,"X");
+            game.playMakeMove(4,"O");
+            game.playMakeMove(2,"X");
+            game.playMakeMove(5,"O");
+            game.playMakeMove(7,"X");
+            game.playMakeMove(AI.GetComputerMove(game.moveAvailable, "O", "X"), "O"); // lets the computer pick a move
+
+
+            //Assert
+            Assert.IsTrue(score.CheckForPlayerWin("O"));
+            Assert.IsFalse(score.CheckForPlayerWin("X"));
+
+        }
+    }
 }

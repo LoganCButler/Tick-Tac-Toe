@@ -14,43 +14,55 @@ namespace AppLogic
         public int GetComputerMove(bool[] board, string playerLetter, string oponentLetter)
         {
             currentBoardPosibilities = board;
-            GetRandomPlayAndSetIt();
-            CheckAndSetNextMove("planning", playerLetter, oponentLetter);
-            CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
-            CheckAndSetNextMove("offence", playerLetter, oponentLetter);
+
+            if (board[4])
+                cellToMakeMoveIn = 4;
+            else
+            {
+                GetRandomPlayAndSetIt();
+                CheckAndSetNextMove("openLine", playerLetter, oponentLetter);
+                CheckAndSetNextMove("planning", playerLetter, oponentLetter);
+                CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
+                CheckAndSetNextMove("offence", playerLetter, oponentLetter);
+            }
 
             return cellToMakeMoveIn + 1;
         }
 
         private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
         {
-            string v1 ="";
-            string v2 ="";
-            int v3 = 0;
+            string player ="";
+            string oponent ="";
+            int checkThreshold = 0;
 
             switch (strategy)
             {
+                case "openLine":
+                    player = playerLetter;
+                    oponent = oponentLetter;
+                    checkThreshold = -1;
+                    break;
                 case "offence":
-                    v1 = playerLetter;
-                    v2 = oponentLetter;
-                    v3 = 1;
+                    player = playerLetter;
+                    oponent = oponentLetter;
+                    checkThreshold = 1;
                     break;
                 case "planning":
-                    v1 = playerLetter;
-                    v2 = oponentLetter;
-                    v3 = 0;
+                    player = playerLetter;
+                    oponent = oponentLetter;
+                    checkThreshold = 0;
                     break;
                 case "deffence":
-                    v1 = oponentLetter;
-                    v2 = playerLetter;
-                    v3 = 1;
+                    player = oponentLetter;
+                    oponent = playerLetter;
+                    checkThreshold = 1;
                     break;
                 
             }
 
             for (var i = 0; i < 8; i++)
             {
-                if (GameManager.ScoreInstance.ReturnTallyList(v1)[i].Count() > v3 && GameManager.ScoreInstance.ReturnTallyList(v2)[i].Count() == 0)
+                if (GameManager.ScoreInstance.ReturnTallyList(player)[i].Count() > checkThreshold && GameManager.ScoreInstance.ReturnTallyList(oponent)[i].Count() == 0)
                 {
                     switch (i)
                     {
