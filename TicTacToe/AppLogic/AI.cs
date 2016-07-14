@@ -15,8 +15,6 @@ namespace AppLogic
         {
             currentBoardPosibilities = board;
             GetRandomPlayAndSetIt();
-            //CheckForForcedBlockingMoveAndSetIt();
-            //CheckForNextMoveWinsAndSetIt();
             CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
             CheckAndSetNextMove("offence", playerLetter, oponentLetter);
 
@@ -91,8 +89,6 @@ namespace AppLogic
                     }
                 }
             }
-
-
             return outcome;
         }
 

@@ -71,14 +71,7 @@ namespace AppLogic
             }
             return null;  
         }
-        
-        
-        
-        
-        
-
-        
-
+              
         public void TallyScore(int cell, string player)
         {
             switch (cell)
@@ -96,7 +89,7 @@ namespace AppLogic
                         oWinsV1.Add(1);
                         oWinsDNeg.Add(1);
                     }
-                break;
+                    break;
                 case 2:
                     if (player == "X")
                     {
@@ -206,27 +199,16 @@ namespace AppLogic
             }
         }
 
-        public bool xWins()
+        public bool CheckForPlayerWin(string playerLetter)
         {
-            if (xWinsH1.Count == 3 || xWinsH2.Count == 3 || xWinsH3.Count == 3 || xWinsV1.Count == 3 || xWinsV2.Count == 3 || xWinsV3.Count == 3 || xWinsDPos.Count == 3 || xWinsDPos.Count == 3)
+            bool aListEqualsThree = false;
+
+            foreach (var list in ReturnTallyList(playerLetter))
             {
-                return true;
+                if (list.Count() == 3) { aListEqualsThree = true; }
             }
-            else
-            {
-                return false;
-            }
-        }
-        public bool oWins()
-        {
-            if (oWinsH1.Count == 3 || oWinsH2.Count == 3 || oWinsH3.Count == 3 || oWinsV1.Count == 3 || oWinsV2.Count == 3 || oWinsV3.Count == 3 || oWinsDPos.Count == 3 || oWinsDPos.Count == 3)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+
+            return aListEqualsThree;
         }
     }
 }

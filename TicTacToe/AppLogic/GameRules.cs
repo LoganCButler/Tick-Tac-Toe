@@ -7,9 +7,6 @@ using System.Threading.Tasks;
 
 namespace AppLogic
 {
-
-
-
     public class Game
     {
         bool gameContinue = true;
@@ -22,7 +19,6 @@ namespace AppLogic
         public void PlayGame()
         {
             PrintGameBoard();
-            
 
             for (var i = 0;  gameContinue; i++)
             {
@@ -33,95 +29,63 @@ namespace AppLogic
                 }
                 else if (i%2 == 0)
                 {
-                    xPrompt();
+                    //xPrompt();
+                    playPrompt("X");
                     PrintGameBoard(); 
                 }
                 else if (i % 2 == 1)
                 {
-                    oPrompt();
+                    //oPrompt();
+                    playPrompt("O");
                     PrintGameBoard();
                 }
             }
         }
-
-        
- 
 
         private void PrintGameBoard()
         {
             Console.WriteLine("\n {0} | {1} | {2} \n-----------\n {3} | {4} | {5} \n-----------\n {6} | {7} | {8} \n", board[0], board[1], board[2], board[3], board[4], board[5], board[6], board[7], board[8]);
         }
 
-        private void xPrompt()
+        private void playPrompt(string playerLetter)
         {
-            try
+            switch (playerLetter)
             {
-                Console.WriteLine("Enter a cell to place an X");
-                xMove(Convert.ToInt16(Console.ReadLine()));
-            }
-            catch (Exception)
-            {
-
-                Console.WriteLine("Please only enter in numbers.");
-                xPrompt();
-            }
-        }
-
-        public void oPrompt()
-        {
-            Console.WriteLine("The Computer will now play it's move.");
-            oMove(GameManager.AIInstance.GetComputerMove(moveAvailable,"O","X"));
-            
-        }
-
-        public void xMove(int cell)
-        {
-            try
-            {
-                if (moveAvailable[cell - 1])
-                {
-                    board[cell - 1] = "X";
-                    moveAvailable[cell - 1] = false;
-                    GameManager.ScoreInstance.TallyScore(cell, "X");
-                    moveCounter += 1;
-                    if (GameManager.ScoreInstance.xWins())
+                case "X":
+                    try
                     {
-                        gameContinue = false;
-                        Console.WriteLine("X Wins!");
-                        PrintGameBoard();
-                        Console.ReadLine();
+                        Console.WriteLine("Enter a cell to place an X");
+                        playMakeMove(Convert.ToInt16(Console.ReadLine()),"X");
                     }
-                    
-                }
-                else
-                {
-                    Console.WriteLine("Choose another cell");
-                    xMove(Convert.ToInt16(Console.ReadLine()));
-                }
-            }
-            catch (Exception)
-            {
+                    catch (Exception)
+                    {
 
-                Console.WriteLine("Only enter in numbers 1-9");
-                xPrompt();
-            }
+                        Console.WriteLine("Please only enter in numbers.");
+                        playPrompt("X");
+                    }
+                    break;
+                case "O":
+                    Console.WriteLine("The Computer will now play it's move.");
+                    playMakeMove(GameManager.AIInstance.GetComputerMove(moveAvailable, "O", "X"),"O");
+                    break;
 
+            }
         }
 
-    public void oMove (int cell)
-    {
+        public void playMakeMove(int cell, string playerLetter)
+        {
             try
             {
                 if (moveAvailable[cell - 1])
                 {
-                    board[cell - 1] = "O";
+                    board[cell - 1] = playerLetter;
                     moveAvailable[cell - 1] = false;
-                    GameManager.ScoreInstance.TallyScore(cell, "O");
+                    GameManager.ScoreInstance.TallyScore(cell, playerLetter);
                     moveCounter += 1;
-                    if (GameManager.ScoreInstance.oWins())
+                    if (GameManager.ScoreInstance.CheckForPlayerWin(playerLetter))
                     {
                         gameContinue = false;
-                        Console.WriteLine("O Wins!");
+                        Console.WriteLine("{0} Wins!",playerLetter);
                         PrintGameBoard();
                         Console.ReadLine();
                     }
@@ -129,15 +93,15 @@ namespace AppLogic
                 else
                 {
                     Console.WriteLine("Choose another cell");
-                    oMove(Convert.ToInt16(Console.ReadLine()));
+                    playMakeMove(Convert.ToInt16(Console.ReadLine()),playerLetter);
                 }
             }
             catch (Exception)
             {
 
                 Console.WriteLine("Only enter in numbers 1-9");
-                oPrompt();
+                playPrompt("X");
             }
         }
-}
+    }
 }

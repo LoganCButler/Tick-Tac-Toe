@@ -4,24 +4,24 @@ using AppLogic;
 
 namespace UnitTest
 {
-    [TestClass]
-    public class UnitTest1
-    {
-        [TestMethod]
-        public void xWins()
-        {
-            //Set up
-            var game = GameManager.GameInstance;
+    //[TestClass]
+    //public class UnitTest1
+    //{
+    //    [TestMethod]
+    //    public void xWins()
+    //    {
+    //        //Set up
+    //        var game = GameManager.GameInstance;
             
-            //run
-            game.xMove(1);
-            game.oMove(4);
-            game.xMove(2);
-            game.oMove(5);
-            game.xMove(3);
+    //        //run
+    //        game.xMove(1);
+    //        game.oMove(4);
+    //        game.xMove(2);
+    //        game.oMove(5);
+    //        game.xMove(3);
 
-            //Assert
-        }
+    //        //Assert
+    //    }
         //[TestMethod]
         //public void ComputerPlaysAWinningMove()
         //{
@@ -39,5 +39,5 @@ namespace UnitTest
         //    //Assert
         //    Assert.AreEqual(3, GameManager.ScoreInstance.oWinsH2.Count);
         //}
-    }
+    //}
 }
