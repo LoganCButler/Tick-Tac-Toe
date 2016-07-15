@@ -39,7 +39,7 @@ namespace UnitTest
             game.playMakeMove(2,"X");
             game.playMakeMove(5,"O");
             game.playMakeMove(7,"X");
-            game.playMakeMove(AI.GetComputerMove(game.moveAvailable, "O", "X"), "O"); // lets the computer pick a move
+            //game.playMakeMove(AI.GetComputerMove(game.moveAvailable, "O", "X"), "O"); // lets the computer pick a move
 
 
             //Assert

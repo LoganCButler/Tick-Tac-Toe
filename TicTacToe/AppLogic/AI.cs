@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 
 namespace AppLogic
 {
+    
+
+    
+
     public class AI
     {
-        bool[] currentBoardPosibilities;
-        int cellToMakeMoveIn;
 
-        int[,] winningLines = { 
+
+        int computerBestMoveToMake = 0;
+
+        public string currentPlayer = "O";
+
+        public int[,] winningLines = new int[8,3]{ 
                                     //H1
                                     { 0, 1, 2 }, 
                                     //H2
@@ -32,117 +39,223 @@ namespace AppLogic
                                     { 2, 4, 6 }
                                };
 
-        public int GetComputerMove(bool[] board, string playerLetter, string oponentLetter)
+        public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter)
         {
-            currentBoardPosibilities = board;
 
-            
-                GetRandomPlayAndSetIt();
-                CheckAndSetNextMove("openLine", playerLetter, oponentLetter);
-                CheckAndSetNextMove("planning", playerLetter, oponentLetter);
-                CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
-                CheckAndSetNextMove("offence", playerLetter, oponentLetter);
-           
 
-            return cellToMakeMoveIn + 1;
+            minimax(cloneGrid(currentBoard), playerLetter);
+            Console.WriteLine(computerBestMoveToMake.ToString());
+            return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
+       
         }
 
-        private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
-        {
-            string player ="";
-            string oponent ="";
-            int checkThreshold = 0;
+        //private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
+        //{
+        //    string player ="";
+        //    string oponent ="";
+        //    int checkThreshold = 0;
 
-            switch (strategy)
-            {
-                case "openLine":
-                    player = playerLetter;
-                    oponent = oponentLetter;
-                    checkThreshold = -1;
-                    break;
-                case "offence":
-                    player = playerLetter;
-                    oponent = oponentLetter;
-                    checkThreshold = 1;
-                    break;
-                case "planning":
-                    player = playerLetter;
-                    oponent = oponentLetter;
-                    checkThreshold = 0;
-                    break;
-                case "deffence":
-                    player = oponentLetter;
-                    oponent = playerLetter;
-                    checkThreshold = 1;
-                    break;
+        //    switch (strategy)
+        //    {
+        //        case "openLine":
+        //            player = playerLetter;
+        //            oponent = oponentLetter;
+        //            checkThreshold = -1;
+        //            break;
+        //        case "offence":
+        //            player = playerLetter;
+        //            oponent = oponentLetter;
+        //            checkThreshold = 1;
+        //            break;
+        //        case "planning":
+        //            player = playerLetter;
+        //            oponent = oponentLetter;
+        //            checkThreshold = 0;
+        //            break;
+        //        case "deffence":
+        //            player = oponentLetter;
+        //            oponent = playerLetter;
+        //            checkThreshold = 1;
+        //            break;
                 
-            }
+        //    }
 
-            for (var i = 7; i > -1; i--)
+        //    for (var i = 7; i > -1; i--)
+        //    {
+        //        if (GameManager.ScoreInstance.ReturnTallyList(player)[i].Count() > checkThreshold && GameManager.ScoreInstance.ReturnTallyList(oponent)[i].Count() == 0)
+        //        {
+        //            switch (i)
+        //            {
+        //                case 0: // H1 
+        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+        //                    if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+        //                    break;
+        //                case 1: //H2
+        //                    if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+        //                    if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
+        //                    break;
+        //                case 2: //H3
+        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+        //                    if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
+        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+        //                    break;
+        //                case 3: //V1
+        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+        //                    if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
+        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+        //                    break;
+        //                case 4: //V2
+        //                    if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
+        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+        //                    if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
+        //                    break;
+        //                case 5: //V3
+        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+        //                    if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
+        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+        //                    break;
+        //                case 6: //DNeg
+        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
+        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
+        //                    break;
+        //                case 7: //DNeg
+        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
+        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
+        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
+        //                    break;
+        //            }
+        //        }
+        //    }
+          
+        //}
+
+        //public void GetRandomPlayAndSetIt()
+        //{
+        //    bool tryAgain = true;
+        //    while (tryAgain)
+        //    {
+        //        Random R = new Random();
+        //        int attempt = R.Next(0, 8);
+        //        if (currentBoardPosibilities[attempt])
+        //        {
+        //            cellToMakeMoveIn = attempt;
+        //            tryAgain = false;
+        //        }               
+        //    }
+        //}
+
+        
+        static string[] cloneGrid(string[] inputBoard)
+        {
+            string[] cloneGrid = new string[9];
+            for ( var i=0; i < 9; i++)
             {
-                if (GameManager.ScoreInstance.ReturnTallyList(player)[i].Count() > checkThreshold && GameManager.ScoreInstance.ReturnTallyList(oponent)[i].Count() == 0)
+                cloneGrid[i] = inputBoard[i];
+            }
+            return cloneGrid;
+        }
+
+        static int checkScore(string[] Grid, string player)
+        {
+            if (checkGameWin(Grid, player)) return 10;
+
+            else if (checkGameWin(Grid, switchPiece(player))) return -10;
+
+            else return 0;
+        }
+
+        private static string switchPiece(string player)
+        {
+            switch (player)
+            {
+                case "X":
+                    return "O";
+                case "O":
+                    return "X";
+                default:
+                    return GameManager.AIInstance.currentPlayer;
+            }
+                
+        }
+
+        static bool checkGameWin(string[] Grid, string player)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                if
+                (
+                    Grid[GameManager.AIInstance.winningLines[i, 0]] == player &&
+                    Grid[GameManager.AIInstance.winningLines[i, 1]] == player &&
+                    Grid[GameManager.AIInstance.winningLines[i, 2]] == player
+                )
                 {
-                    switch (i)
-                    {
-                        case 0: // H1 
-                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
-                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-                            break;
-                        case 1: //H2
-                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
-                            break;
-                        case 2: //H3
-                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-                            break;
-                        case 3: //V1
-                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-                            if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
-                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-                            break;
-                        case 4: //V2
-                            if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-                            if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
-                            break;
-                        case 5: //V3
-                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-                            if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-                            break;
-                        case 6: //DNeg
-                            if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-                            if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-                            break;
-                        case 7: //DNeg
-                            if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-                            if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-                            if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-                            break;
-                    }
+                    return true;
                 }
             }
-          
+            return false;
         }
 
-        public void GetRandomPlayAndSetIt()
+        static bool checkGameEnd(string[] board) // checks if the board game is filled up. 
         {
-            bool tryAgain = true;
-            while (tryAgain)
+            for (var i= 0; i < 9; i++) 
             {
-                Random R = new Random();
-                int attempt = R.Next(0, 8);
-                if (currentBoardPosibilities[attempt])
+                if (board[i] != "X" && board[i] != "O")
                 {
-                    cellToMakeMoveIn = attempt;
-                    tryAgain = false;
-                }               
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        int minimax(string[] InputGrid, string player)
+        {
+            string[] Grid = cloneGrid(InputGrid);//make a copy of the current board to manipulate
+
+            if (checkScore(Grid, "O") != 0) // check if the game is over and someone one
+            {
+                return checkScore(Grid, player); // return +10 for win -10 for a loss
+            }
+            else if (checkGameEnd(InputGrid)) // check for a filled board (no more spots available and no win)
+            {
+                return 0; // tie game and score is 0
+            }
+
+            List<int> scores = new List<int>();
+            List<int> moves = new List<int>();
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (InputGrid[i] != "X" && InputGrid[i] != "O")
+                {
+                    
+                    scores.Add(minimax(makeGridMove(Grid, player, i), switchPiece(player)));
+                    moves.Add(i);
+                }
+            }
+
+            if (player == "X")
+            {
+                int MaxScoreIndex = scores.IndexOf(scores.Max());
+                computerBestMoveToMake = moves[MaxScoreIndex];
+                return scores.Max();
+            }
+            else
+            {
+                int MinScoreIndex = scores.IndexOf(scores.Min());
+                computerBestMoveToMake = moves[MinScoreIndex];
+                return scores.Min();
             }
         }
+
+        static string[] makeGridMove(string[] Grid, string Move, int Position)
+        {
+            string[] newGrid = cloneGrid(Grid);
+            newGrid[Position] = Move;
+            return newGrid;
+        }
+
     }
 }
