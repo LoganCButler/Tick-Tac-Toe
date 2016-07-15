@@ -10,7 +10,7 @@ namespace AppLogic
     public class Game
     {
         bool gameContinue = true;
-        int moveCounter = 0;
+        public int moveCounter = 0;
         //board set up
         public string[] board = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public bool[] moveAvailable = new bool[] { true, true, true, true, true, true, true, true, true };

@@ -11,20 +11,38 @@ namespace AppLogic
         bool[] currentBoardPosibilities;
         int cellToMakeMoveIn;
 
+        int[,] winningLines = { 
+                                    //H1
+                                    { 0, 1, 2 }, 
+                                    //H2
+                                    { 3, 4, 5 },
+                                    //H3
+                                    { 6, 7, 8 }, 
+
+                                    //V1
+                                    { 0, 3, 6 },
+                                    //V2       
+                                    { 1, 4, 7 }, 
+                                    //V3
+                                    { 2, 5, 8 },
+
+                                    //DNeg
+                                    { 0, 4, 8 }, 
+                                    //DPpos
+                                    { 2, 4, 6 }
+                               };
+
         public int GetComputerMove(bool[] board, string playerLetter, string oponentLetter)
         {
             currentBoardPosibilities = board;
 
-            if (board[4])
-                cellToMakeMoveIn = 4;
-            else
-            {
+            
                 GetRandomPlayAndSetIt();
                 CheckAndSetNextMove("openLine", playerLetter, oponentLetter);
                 CheckAndSetNextMove("planning", playerLetter, oponentLetter);
                 CheckAndSetNextMove("deffence", playerLetter, oponentLetter);
                 CheckAndSetNextMove("offence", playerLetter, oponentLetter);
-            }
+           
 
             return cellToMakeMoveIn + 1;
         }
@@ -60,7 +78,7 @@ namespace AppLogic
                 
             }
 
-            for (var i = 0; i < 8; i++)
+            for (var i = 7; i > -1; i--)
             {
                 if (GameManager.ScoreInstance.ReturnTallyList(player)[i].Count() > checkThreshold && GameManager.ScoreInstance.ReturnTallyList(oponent)[i].Count() == 0)
                 {
