@@ -23,7 +23,7 @@ namespace AppLogic
 
         public void PlayGame()
         {
-            //GetPlayerSetup();
+            GetPlayerSetup();
             PrintGameBoard();
 
             for (var i = 0;  gameContinue; i++)
@@ -44,6 +44,27 @@ namespace AppLogic
                         PrintGameBoard(); 
                 }
             }
+        }
+
+        private void GetPlayerSetup()
+        {
+            Console.WriteLine("Please enter 1 for : Player vs. Player \n Or 2 for : Player vs. Computer");
+            
+                var responce = Console.ReadLine().ToString();
+                if (responce == "1")
+                {
+                    computerPlayer = false;
+                }
+               else if (responce == "2")
+                {
+                    computerPlayer = true;
+                }
+                else
+                {
+                    Console.WriteLine("Please only enter a 1 or a 2.");
+                    GetPlayerSetup();
+                }
+            
         }
 
         private void PrintGameBoard()
