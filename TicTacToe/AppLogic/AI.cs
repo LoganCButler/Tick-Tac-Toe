@@ -19,7 +19,7 @@ namespace AppLogic
 
         int computerBestMoveToMake = 0;
         public int numberOfTurns = 0;
-        public string currentPlayer = "O";
+        public string currentPlayer = GameManager.GameInstance.Player2;
         public List<int> scores = new List<int>();
         List<int> moves = new List<int>();
 
@@ -47,7 +47,7 @@ namespace AppLogic
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
 
-            if (currentBoard[centerSquare] == player1 && moveCount <= 1)
+            if (currentBoard[centerSquare] == player1 && moveCount == 1)
             {
                 computerBestMoveToMake = 0;
                 return computerBestMoveToMake+1;
