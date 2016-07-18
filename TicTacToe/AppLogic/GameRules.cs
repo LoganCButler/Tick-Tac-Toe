@@ -64,7 +64,7 @@ namespace AppLogic
                     break;
                 case "O":
                     Console.WriteLine("The Computer will now play it's move.");
-                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, "O", "X"),"O");
+                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, "O", "X",moveCounter),"O");
                     break;
 
             }

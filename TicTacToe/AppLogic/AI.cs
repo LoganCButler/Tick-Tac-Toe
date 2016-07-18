@@ -41,17 +41,45 @@ namespace AppLogic
                                     { 2, 4, 6 }
                                };
 
-        public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter)
+        public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
 
-            var node = 0;
-            minimax(cloneGrid(currentBoard), playerLetter, node);
-            Console.WriteLine(string.Format("{0}", computerBestMoveToMake+1));
-            scores.Clear();
-            moves.Clear();
+            if (CheckForFork(currentBoard, moveCount))
+            {
+                computerBestMoveToMake = BlockFork(currentBoard);
+                return computerBestMoveToMake+1;
+            }
+            if (currentBoard[4] != "X" && currentBoard[4] != "O")
+            {
+                computerBestMoveToMake = 4;
+            }           
+            else
+            {
+                var node = 0;
+                minimax(cloneGrid(currentBoard), playerLetter, node);
+                Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
+                scores.Clear();
+                moves.Clear();
+            }
+
+
+
             return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
 
        
+        }
+
+        private int BlockFork(string[] currentBoard)
+        {
+            if (currentBoard[0] == "X" && currentBoard[8] == "X") { return 5; }
+            if (currentBoard[2] == "X" && currentBoard[6] == "X") { return 1; }
+            else return -1;
+        }
+        private bool CheckForFork(string[] currentBoard, int movecounter)
+        {
+            if (currentBoard[0]=="X" && currentBoard[8] == "X" && movecounter==3) { return true; }
+            if (currentBoard[2] == "X" && currentBoard[6] == "X" && movecounter == 3) { return true; }
+            else { return false; }
         }
 
         //private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
@@ -82,7 +110,7 @@ namespace AppLogic
         //            oponent = playerLetter;
         //            checkThreshold = 1;
         //            break;
-                
+
         //    }
 
         //    for (var i = 7; i > -1; i--)
@@ -134,7 +162,7 @@ namespace AppLogic
         //            }
         //        }
         //    }
-          
+
         //}
 
         //public void GetRandomPlayAndSetIt()
@@ -152,7 +180,7 @@ namespace AppLogic
         //    }
         //}
 
-        
+
         static string[] cloneGrid(string[] inputBoard)
         {
             string[] cloneGrid = new string[9];
@@ -169,14 +197,12 @@ namespace AppLogic
             {
                 var score = -10 + node;
                 var moveScore = score;
-                GameManager.AIInstance.numberOfTurns = 1;
                 return moveScore;
             }
             else if (checkGameWin(Grid, "O"))
             {
                 var score = +10 - node;
                 var moveScore = score;
-                GameManager.AIInstance.numberOfTurns = 1;
                 return moveScore;
             }
             else return 0;
@@ -250,18 +276,69 @@ namespace AppLogic
                 
             }
 
-            if (player == "X")
+            //if (player == "X")
+            //{
+            //    int MaxScoreIndex = scores.IndexOf(scores.Max());
+            //    computerBestMoveToMake = moves[MaxScoreIndex];
+            //    return scores.Max();
+            //}
+            //else
+            //{
+            //    int MinScoreIndex = scores.IndexOf(scores.Min());
+            //    computerBestMoveToMake = moves[MinScoreIndex];
+            //    return scores.Min();
+
+                if (player == "X")
             {
-                int MaxScoreIndex = scores.IndexOf(scores.Max());
-                computerBestMoveToMake = moves[MaxScoreIndex];
-                return scores.Max();
+                computerBestMoveToMake = GetModeForMaxScore(scores, moves);
+                return computerBestMoveToMake;
             }
             else
             {
-                int MinScoreIndex = scores.IndexOf(scores.Min());
-                computerBestMoveToMake = moves[MinScoreIndex];
-                return scores.Min();
+                computerBestMoveToMake = GetModeForMinScore(scores, moves);
+                return GetModeForMinScore(scores, moves);
             }
+        }
+
+
+        /// Method to take all moves for tying Max scores. Then selecting the mode of the moves. 
+        static int GetModeForMaxScore(List<int> scores, List<int> moves)
+        {
+            List<int> MaxMoveScoreTies = new List<int> { };
+       
+            for (var i = 0; i < scores.Count(); i++)
+            {
+                if (scores.Max() == scores[i])
+                {
+                    MaxMoveScoreTies.Add(moves[i]);
+                }
+            }
+            //sorts the list and gets the move that has the highest score and most options. 
+            int BestBestMove = MaxMoveScoreTies.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key;
+
+            return BestBestMove;
+        }
+        static int GetModeForMinScore(List<int> scores, List<int> moves)
+        {
+            List<int> MinMoveScoreTies = new List<int> { };
+
+            for (var i = 0; i < scores.Count(); i++)
+            {
+                if (scores.Min() == scores[i])
+                {
+                    MinMoveScoreTies.Add(moves[i]);
+                }
+            }
+            //sorts the list and gets the move that has the Lowest score and most options. 
+            int WorstWorstMove = MinMoveScoreTies.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key;
+
+            return WorstWorstMove;
         }
 
         static string[] makeGridMove(string[] Grid, string Move, int Position)
