@@ -15,8 +15,10 @@ namespace AppLogic
 
 
         int computerBestMoveToMake = 0;
-
+        public int numberOfTurns = 0;
         public string currentPlayer = "O";
+        public List<int> scores = new List<int>();
+        List<int> moves = new List<int>();
 
         public int[,] winningLines = new int[8,3]{ 
                                     //H1
@@ -42,10 +44,13 @@ namespace AppLogic
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter)
         {
 
-
-            minimax(cloneGrid(currentBoard), playerLetter);
-            Console.WriteLine(computerBestMoveToMake.ToString());
+            var node = 0;
+            minimax(cloneGrid(currentBoard), playerLetter, node);
+            Console.WriteLine(string.Format("{0}", computerBestMoveToMake+1));
+            scores.Clear();
+            moves.Clear();
             return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
+
        
         }
 
@@ -158,12 +163,22 @@ namespace AppLogic
             return cloneGrid;
         }
 
-        static int checkScore(string[] Grid, string player)
+        static int checkScore(string[] Grid, int node)
         {
-            if (checkGameWin(Grid, player)) return 10;
-
-            else if (checkGameWin(Grid, switchPiece(player))) return -10;
-
+            if (checkGameWin(Grid, "X"))
+            {
+                var score = -10 + node;
+                var moveScore = score;
+                GameManager.AIInstance.numberOfTurns = 1;
+                return moveScore;
+            }
+            else if (checkGameWin(Grid, "O"))
+            {
+                var score = +10 - node;
+                var moveScore = score;
+                GameManager.AIInstance.numberOfTurns = 1;
+                return moveScore;
+            }
             else return 0;
         }
 
@@ -210,30 +225,29 @@ namespace AppLogic
             return true;
         }
 
-        int minimax(string[] InputGrid, string player)
+        int minimax(string[] InputGrid, string player, int nodeCount)
         {
             string[] Grid = cloneGrid(InputGrid);//make a copy of the current board to manipulate
 
-            if (checkScore(Grid, "O") != 0) // check if the game is over and someone one
+            if (checkScore(Grid, nodeCount) != 0) // check if the game is over and someone won
             {
-                return checkScore(Grid, player); // return +10 for win -10 for a loss
+                return checkScore(Grid, nodeCount); // return +10-turns for win -10+turns for a loss
             }
             else if (checkGameEnd(InputGrid)) // check for a filled board (no more spots available and no win)
             {
                 return 0; // tie game and score is 0
             }
 
-            List<int> scores = new List<int>();
-            List<int> moves = new List<int>();
+            
 
             for (int i = 0; i < 9; i++)
             {
                 if (InputGrid[i] != "X" && InputGrid[i] != "O")
-                {
-                    
-                    scores.Add(minimax(makeGridMove(Grid, player, i), switchPiece(player)));
-                    moves.Add(i);
+                {                    
+                    scores.Add(minimax(makeGridMove(Grid, player, i), switchPiece(player), nodeCount + 1));
+                    moves.Add(i);                  
                 }
+                
             }
 
             if (player == "X")
