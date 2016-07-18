@@ -44,6 +44,11 @@ namespace AppLogic
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
 
+            if (currentBoard[4] == "X" && moveCount == 1)
+            {
+                computerBestMoveToMake = 0;
+                return computerBestMoveToMake+1;
+            }
             if (CheckForFork(currentBoard, moveCount))
             {
                 computerBestMoveToMake = BlockFork(currentBoard);
