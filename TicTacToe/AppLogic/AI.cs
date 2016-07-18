@@ -12,6 +12,9 @@ namespace AppLogic
 
     public class AI
     {
+        string player1 = GameManager.GameInstance.Player1;
+        string player2 = GameManager.GameInstance.Player2;
+        int centerSquare = 4;
 
 
         int computerBestMoveToMake = 0;
@@ -44,7 +47,7 @@ namespace AppLogic
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
 
-            if (currentBoard[4] == "X" && moveCount == 1)
+            if (currentBoard[centerSquare] == player1 && moveCount <= 1)
             {
                 computerBestMoveToMake = 0;
                 return computerBestMoveToMake+1;
@@ -54,9 +57,9 @@ namespace AppLogic
                 computerBestMoveToMake = BlockFork(currentBoard);
                 return computerBestMoveToMake+1;
             }
-            if (currentBoard[4] != "X" && currentBoard[4] != "O")
+            if (currentBoard[centerSquare] != player1 && currentBoard[centerSquare] != player2)
             {
-                computerBestMoveToMake = 4;
+                computerBestMoveToMake = centerSquare;
             }           
             else
             {
@@ -76,114 +79,17 @@ namespace AppLogic
 
         private int BlockFork(string[] currentBoard)
         {
-            if (currentBoard[0] == "X" && currentBoard[8] == "X") { return 5; }
-            if (currentBoard[2] == "X" && currentBoard[6] == "X") { return 1; }
+            if (currentBoard[0] == player1 && currentBoard[8] == player1) { return 5; }
+            if (currentBoard[2] == player1 && currentBoard[6] == player1) { return 1; }
             else return -1;
         }
         private bool CheckForFork(string[] currentBoard, int movecounter)
         {
-            if (currentBoard[0]=="X" && currentBoard[8] == "X" && movecounter==3) { return true; }
-            if (currentBoard[2] == "X" && currentBoard[6] == "X" && movecounter == 3) { return true; }
+            if (currentBoard[0]==player1 && currentBoard[8] == player1 && movecounter==3) { return true; }
+            if (currentBoard[2] == player1 && currentBoard[6] == player1 && movecounter == 3) { return true; }
             else { return false; }
         }
 
-        //private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
-        //{
-        //    string player ="";
-        //    string oponent ="";
-        //    int checkThreshold = 0;
-
-        //    switch (strategy)
-        //    {
-        //        case "openLine":
-        //            player = playerLetter;
-        //            oponent = oponentLetter;
-        //            checkThreshold = -1;
-        //            break;
-        //        case "offence":
-        //            player = playerLetter;
-        //            oponent = oponentLetter;
-        //            checkThreshold = 1;
-        //            break;
-        //        case "planning":
-        //            player = playerLetter;
-        //            oponent = oponentLetter;
-        //            checkThreshold = 0;
-        //            break;
-        //        case "deffence":
-        //            player = oponentLetter;
-        //            oponent = playerLetter;
-        //            checkThreshold = 1;
-        //            break;
-
-        //    }
-
-        //    for (var i = 7; i > -1; i--)
-        //    {
-        //        if (GameManager.ScoreInstance.ReturnTallyList(player)[i].Count() > checkThreshold && GameManager.ScoreInstance.ReturnTallyList(oponent)[i].Count() == 0)
-        //        {
-        //            switch (i)
-        //            {
-        //                case 0: // H1 
-        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-        //                    if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
-        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-        //                    break;
-        //                case 1: //H2
-        //                    if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
-        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-        //                    if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
-        //                    break;
-        //                case 2: //H3
-        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-        //                    if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
-        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-        //                    break;
-        //                case 3: //V1
-        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-        //                    if (GameManager.GameInstance.moveAvailable[3]) { cellToMakeMoveIn = 3; }
-        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-        //                    break;
-        //                case 4: //V2
-        //                    if (GameManager.GameInstance.moveAvailable[1]) { cellToMakeMoveIn = 1; }
-        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-        //                    if (GameManager.GameInstance.moveAvailable[7]) { cellToMakeMoveIn = 7; }
-        //                    break;
-        //                case 5: //V3
-        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-        //                    if (GameManager.GameInstance.moveAvailable[5]) { cellToMakeMoveIn = 5; }
-        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-        //                    break;
-        //                case 6: //DNeg
-        //                    if (GameManager.GameInstance.moveAvailable[0]) { cellToMakeMoveIn = 0; }
-        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-        //                    if (GameManager.GameInstance.moveAvailable[8]) { cellToMakeMoveIn = 8; }
-        //                    break;
-        //                case 7: //DNeg
-        //                    if (GameManager.GameInstance.moveAvailable[2]) { cellToMakeMoveIn = 2; }
-        //                    if (GameManager.GameInstance.moveAvailable[4]) { cellToMakeMoveIn = 4; }
-        //                    if (GameManager.GameInstance.moveAvailable[6]) { cellToMakeMoveIn = 6; }
-        //                    break;
-        //            }
-        //        }
-        //    }
-
-        //}
-
-        //public void GetRandomPlayAndSetIt()
-        //{
-        //    bool tryAgain = true;
-        //    while (tryAgain)
-        //    {
-        //        Random R = new Random();
-        //        int attempt = R.Next(0, 8);
-        //        if (currentBoardPosibilities[attempt])
-        //        {
-        //            cellToMakeMoveIn = attempt;
-        //            tryAgain = false;
-        //        }               
-        //    }
-        //}
 
 
         static string[] cloneGrid(string[] inputBoard)
@@ -198,13 +104,13 @@ namespace AppLogic
 
         static int checkScore(string[] Grid, int node)
         {
-            if (checkGameWin(Grid, "X"))
+            if (checkGameWin(Grid, GameManager.GameInstance.Player1))
             {
                 var score = -10 + node;
                 var moveScore = score;
                 return moveScore;
             }
-            else if (checkGameWin(Grid, "O"))
+            else if (checkGameWin(Grid, GameManager.GameInstance.Player2))
             {
                 var score = +10 - node;
                 var moveScore = score;
@@ -215,15 +121,16 @@ namespace AppLogic
 
         private static string switchPiece(string player)
         {
-            switch (player)
-            {
-                case "X":
-                    return "O";
-                case "O":
-                    return "X";
-                default:
-                    return GameManager.AIInstance.currentPlayer;
+
+            if (player == GameManager.GameInstance.Player1) {
+                return GameManager.GameInstance.Player2;
             }
+            else
+            { 
+                    return GameManager.GameInstance.Player1;
+            }
+               
+            
                 
         }
 
@@ -248,7 +155,7 @@ namespace AppLogic
         {
             for (var i= 0; i < 9; i++) 
             {
-                if (board[i] != "X" && board[i] != "O")
+                if (board[i] != GameManager.GameInstance.Player1 && board[i] != GameManager.GameInstance.Player2)
                 {
                     return false;
                 }
@@ -273,7 +180,7 @@ namespace AppLogic
 
             for (int i = 0; i < 9; i++)
             {
-                if (InputGrid[i] != "X" && InputGrid[i] != "O")
+                if (InputGrid[i] != player1 && InputGrid[i] != player2)
                 {                    
                     scores.Add(minimax(makeGridMove(Grid, player, i), switchPiece(player), nodeCount + 1));
                     moves.Add(i);                  
@@ -281,19 +188,8 @@ namespace AppLogic
                 
             }
 
-            //if (player == "X")
-            //{
-            //    int MaxScoreIndex = scores.IndexOf(scores.Max());
-            //    computerBestMoveToMake = moves[MaxScoreIndex];
-            //    return scores.Max();
-            //}
-            //else
-            //{
-            //    int MinScoreIndex = scores.IndexOf(scores.Min());
-            //    computerBestMoveToMake = moves[MinScoreIndex];
-            //    return scores.Min();
 
-                if (player == "X")
+                if (player == player1)
             {
                 computerBestMoveToMake = GetModeForMaxScore(scores, moves);
                 return computerBestMoveToMake;

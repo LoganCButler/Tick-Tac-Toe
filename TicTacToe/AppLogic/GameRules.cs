@@ -9,6 +9,10 @@ namespace AppLogic
 {
     public class Game
     {
+        public string Player1 = "a";
+        public string Player2 = "z";       
+        bool computerPlayer = false; 
+
         bool gameContinue = true;
         public int moveCounter = 0;
         //board set up
@@ -16,8 +20,10 @@ namespace AppLogic
         public bool[] moveAvailable = new bool[] { true, true, true, true, true, true, true, true, true };
 
 
+
         public void PlayGame()
         {
+            //GetPlayerSetup();
             PrintGameBoard();
 
             for (var i = 0;  gameContinue; i++)
@@ -29,13 +35,13 @@ namespace AppLogic
                 }
                 else if (i%2 == 0)
                 {
-                    playPrompt("X");
+                    playPrompt(Player1);
                     PrintGameBoard(); 
                 }
                 else if (i % 2 == 1)
-                {
-                    playPrompt("O");
-                    PrintGameBoard();
+                {                                    
+                        playPrompt(Player2);
+                        PrintGameBoard(); 
                 }
             }
         }
@@ -47,27 +53,45 @@ namespace AppLogic
 
         private void playPrompt(string playerLetter)
         {
-            switch (playerLetter)
+
+            if (playerLetter == Player1)
             {
-                case "X":
+                try
+                {
+                    Console.WriteLine("Enter a cell to place an {0}",Player1);
+                    playMakeMove(Convert.ToInt16(Console.ReadLine()), Player1);
+                }
+                catch (Exception)
+                {
+
+                    Console.WriteLine("Please only enter in numbers.");
+                    playPrompt(Player1);
+                }
+            }
+            else
+            {
+                if (computerPlayer)
+                {
+                    Console.WriteLine("The Computer will now play it's move.");
+                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, Player2, Player1, moveCounter), Player2); 
+                }
+                else
+                {
                     try
                     {
-                        Console.WriteLine("Enter a cell to place an X");
-                        playMakeMove(Convert.ToInt16(Console.ReadLine()),"X");
+                        Console.WriteLine("Enter a cell to place an {0}", Player2);
+                        playMakeMove(Convert.ToInt16(Console.ReadLine()), Player2);
                     }
                     catch (Exception)
                     {
 
                         Console.WriteLine("Please only enter in numbers.");
-                        playPrompt("X");
+                        playPrompt(Player2);
                     }
-                    break;
-                case "O":
-                    Console.WriteLine("The Computer will now play it's move.");
-                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, "O", "X",moveCounter),"O");
-                    break;
-
+                }
             }
+
+            
         }
 
         public void playMakeMove(int cell, string playerLetter)
@@ -98,7 +122,7 @@ namespace AppLogic
             {
 
                 Console.WriteLine("Only enter in numbers 1-9");
-                playPrompt("X");
+                playPrompt(Player1);
             }
         }
     }
