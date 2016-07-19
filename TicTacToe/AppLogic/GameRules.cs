@@ -54,10 +54,12 @@ namespace AppLogic
                 if (responce == "1")
                 {
                     computerPlayer = false;
-                }
+                    Console.WriteLine("You chose: Player vs. Player.");
+            }
                else if (responce == "2")
                 {
                     computerPlayer = true;
+                    Console.WriteLine("Player vs. Computer it is.");
                 }
                 else
                 {

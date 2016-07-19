@@ -46,25 +46,32 @@ namespace AppLogic
 
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
-
+            //opponent opening move was center scquare , play the corner square.
             if (currentBoard[centerSquare] == player1 && moveCount == 1)
             {
                 computerBestMoveToMake = 0;
                 return computerBestMoveToMake+1;
             }
+
+            // opponent has set up a forking move, fiol thier plan.
             if (CheckForFork(currentBoard, moveCount))
             {
                 computerBestMoveToMake = BlockFork(currentBoard);
                 return computerBestMoveToMake+1;
             }
+
+            //center square is available , take it. 
             if (currentBoard[centerSquare] != player1 && currentBoard[centerSquare] != player2)
             {
                 computerBestMoveToMake = centerSquare;
             }           
+
+            // run MinMax to find best move, take best move. 
             else
             {
                 var node = 0;
                 minimax(cloneGrid(currentBoard), playerLetter, node);
+                //pickAndSetWinningMove();
                 Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
                 scores.Clear();
                 moves.Clear();
@@ -75,6 +82,26 @@ namespace AppLogic
             return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
 
        
+        }
+
+        private void pickAndSetWinningMove()
+        {
+            List<int> MaxMoveScoreTies = new List<int> { };
+
+            for (var i = 0; i < scores.Count(); i++)
+            {
+                if (scores.Max() == scores[i])
+                {
+                    MaxMoveScoreTies.Add(moves[i]);
+                }
+            }
+            //sorts the list and gets the move that has the highest score and most options. 
+            int BestBestMove = MaxMoveScoreTies.GroupBy(v => v)
+                .OrderByDescending(g => g.Count())
+                .First()
+                .Key;
+
+            computerBestMoveToMake = BestBestMove;
         }
 
         private int BlockFork(string[] currentBoard)
@@ -112,7 +139,7 @@ namespace AppLogic
             }
             else if (checkGameWin(Grid, GameManager.GameInstance.Player2))
             {
-                var score = +10 - node;
+                var score = +20 - node;
                 var moveScore = score;
                 return moveScore;
             }
@@ -192,12 +219,15 @@ namespace AppLogic
                 if (player == player1)
             {
                 computerBestMoveToMake = GetModeForMaxScore(scores, moves);
-                return computerBestMoveToMake;
+                //return computerBestMoveToMake;
+                return 0;
             }
             else
             {
                 computerBestMoveToMake = GetModeForMinScore(scores, moves);
-                return GetModeForMinScore(scores, moves);
+                //return GetModeForMinScore(scores, moves);
+                //return computerBestMoveToMake;
+                return 0;
             }
         }
 
