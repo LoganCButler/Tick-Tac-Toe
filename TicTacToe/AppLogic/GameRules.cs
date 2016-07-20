@@ -9,6 +9,9 @@ namespace AppLogic
 {
     public class Game
     {
+        public string Player1 = "X";
+        public string Player2 = "O";
+
         bool gameContinue = true;
         public int moveCounter = 0;
         //board set up

@@ -12,7 +12,8 @@ namespace AppLogic
 
     public class AI
     {
-
+        string player1 = GameManager.GameInstance.Player1;
+        string player2 = GameManager.GameInstance.Player2;
 
         int computerBestMoveToMake = 0;
         public int numberOfTurns = 0;
@@ -60,10 +61,10 @@ namespace AppLogic
             }           
             else
             {
-                CheckAndSetNextMove("planning", playerLetter, switchPiece(playerLetter));
+                CheckAndSetNextMove("planning", playerLetter, switchPiece(playerLetter));              
+                CheckAndSetNextMove("deffence", playerLetter, switchPiece(playerLetter));
                 CheckAndSetNextMove("offence", playerLetter, switchPiece(playerLetter));
-                CheckAndSetNextMove("deffence", playerLetter, switchPiece(playerLetter)); 
-                
+
             }
 
 
