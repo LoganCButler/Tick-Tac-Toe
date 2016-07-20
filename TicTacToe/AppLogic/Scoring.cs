@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 namespace AppLogic
 {
     
+    
 
     public class Scoring
     {
+        string player1 = GameManager.GameInstance.Player1;
+        string player2 = GameManager.GameInstance.Player2;
+
+
+
         //X  horizontal win
         public List<int> xWinsH1 = new List<int>();
         public List<int> xWinsH2 = new List<int>();
@@ -80,13 +86,13 @@ namespace AppLogic
             switch (cell)
             {
                 case 1:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH1.Add(1);
                         xWinsV1.Add(1);
                         xWinsDNeg.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH1.Add(1);
                         oWinsV1.Add(1);
@@ -94,25 +100,25 @@ namespace AppLogic
                     }
                     break;
                 case 2:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH1.Add(1);
                         xWinsV2.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH1.Add(1);
                         oWinsV2.Add(1);
                     }
                     break;
                 case 3:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH1.Add(1);
                         xWinsV3.Add(1);
                         xWinsDPos.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH1.Add(1);
                         oWinsV3.Add(1);
@@ -120,26 +126,26 @@ namespace AppLogic
                     }
                     break;
                 case 4:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH2.Add(1);
                         xWinsV1.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH2.Add(1);
                         oWinsV1.Add(1);
                     }
                     break;
                 case 5:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH2.Add(1);
                         xWinsV2.Add(1);
                         xWinsDPos.Add(1);
                         xWinsDNeg.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH2.Add(1);
                         oWinsV2.Add(1);
@@ -148,25 +154,25 @@ namespace AppLogic
                     }
                     break;
                 case 6:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH2.Add(1);
                         xWinsV3.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH2.Add(1);
                         oWinsV3.Add(1);
                     }
                     break;
                 case 7:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH3.Add(1);
                         xWinsV1.Add(1);
                         xWinsDPos.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH3.Add(1);
                         oWinsV1.Add(1);
@@ -174,25 +180,25 @@ namespace AppLogic
                     }
                     break;
                 case 8:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH3.Add(1);
                         xWinsV2.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH3.Add(1);
                         oWinsV2.Add(1);
                     }
                     break;
                 case 9:
-                    if (player == "X")
+                    if (player == player1)
                     {
                         xWinsH3.Add(1);
                         xWinsV3.Add(1);
                         xWinsDNeg.Add(1);
                     }
-                    if (player == "O")
+                    if (player == player2)
                     {
                         oWinsH3.Add(1);
                         oWinsV3.Add(1);
