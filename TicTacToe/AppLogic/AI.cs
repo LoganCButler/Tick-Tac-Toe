@@ -21,7 +21,7 @@ namespace AppLogic
         public int numberOfTurns = 0;
         public string currentPlayer = GameManager.GameInstance.Player2;
         public List<int> scores = new List<int>();
-        List<int> moves = new List<int>();
+        public List<int> moves = new List<int>();
 
         public int[,] winningLines = new int[8,3]
             { 

@@ -7,6 +7,40 @@ namespace UnitTest
     [TestClass]
     public class UnitTest1
     {
+        string p1 = GameManager.GameInstance.Player1;
+        string p2 = GameManager.GameInstance.Player2;
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            var game = GameManager.GameInstance;
+            var score = GameManager.ScoreInstance;
+            var AI = GameManager.AIInstance;
+        }
+
+
+        [TestCleanup]
+        public void Resetgame()
+        {
+            //set board back to blank state
+            for ( var i = 0; i < 9; i++)
+            {
+                string str = (i + 1).ToString();
+                GameManager.GameInstance.board[i] = str;
+            }
+
+            //set moves back to available. 
+            for (var i = 0; i < 9; i++)
+            {
+                GameManager.GameInstance.moveAvailable[i] = true;
+            }
+
+            GameManager.AIInstance.scores.Clear();
+            GameManager.AIInstance.moves.Clear();
+            GameManager.AIInstance.computerBestMoveToMake = 0;
+            
+    }
+
 
         [TestMethod]
         public void MinMaxBGlocksAForceBlock()
@@ -15,14 +49,15 @@ namespace UnitTest
             var game = GameManager.GameInstance;
             var score = GameManager.ScoreInstance;
             var AI = GameManager.AIInstance;
-            string[] board = new string[] { "a", "2", "3", "4", "z", "6", "a", "8", "9" };
+            string[] board = new string[] { p1, "2", "3", "4", p2, "6", p1, "8", "9" };
+
 
             //run
-            AI.GetComputerMove(board, game.Player2,0);
+            var move = AI.GetComputerMove(board, game.Player2,0);
 
 
             //Assert
-            Assert.AreEqual(3, AI.computerBestMoveToMake);
+            Assert.AreEqual(4, move);
         }
 
         [TestMethod]
@@ -32,7 +67,7 @@ namespace UnitTest
             var game = GameManager.GameInstance;
             var score = GameManager.ScoreInstance;
             var AI = GameManager.AIInstance;
-            string[] board = new string[] { "a", "a", "3", "z", "z", "6", "a", "8", "9" };
+            string[] board = new string[] { p1, p1, "3", p2, p2, "6", p1, "8", "9" };
 
             //run
             AI.GetComputerMove(board, game.Player2, 0);
