@@ -73,17 +73,32 @@ namespace AppLogic
        
         }
 
-        private int BlockFork(string[] currentBoard)
-        {
-            if (currentBoard[0] == "X" && currentBoard[8] == "X") { return 5; }
-            if (currentBoard[2] == "X" && currentBoard[6] == "X") { return 1; }
-            else return -1;
-        }
         private bool CheckForFork(string[] currentBoard, int movecounter)
         {
-            if (currentBoard[0]=="X" && currentBoard[8] == "X" && movecounter==3) { return true; }
-            if (currentBoard[2] == "X" && currentBoard[6] == "X" && movecounter == 3) { return true; }
+            //Diagonal For
+            if (currentBoard[0] == player1 && currentBoard[8] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[2] == player1 && currentBoard[6] == player1 && movecounter == 3) { return true; }
+
+            //Cornner Fork
+            if (currentBoard[1] == player1 && currentBoard[5] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[5] == player1 && currentBoard[7] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[7] == player1 && currentBoard[3] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[3] == player1 && currentBoard[1] == player1 && movecounter == 3) { return true; }
+
             else { return false; }
+        }
+        private int BlockFork(string[] currentBoard)
+        {
+            //Diagonal Responce
+            if (currentBoard[0] == player1 && currentBoard[8] == player1) { return 5; }
+            if (currentBoard[2] == player1 && currentBoard[6] == player1) { return 1; }
+
+            //Cornner Fork
+            if (currentBoard[1] == player1 && currentBoard[5] == player1) { return 2; }
+            if (currentBoard[5] == player1 && currentBoard[7] == player1) { return 8; }
+            if (currentBoard[7] == player1 && currentBoard[3] == player1) { return 6; }
+            if (currentBoard[3] == player1 && currentBoard[1] == player1) { return 0; }
+            else return -1;
         }
 
         private void CheckAndSetNextMove(string strategy, string playerLetter, string oponentLetter)
