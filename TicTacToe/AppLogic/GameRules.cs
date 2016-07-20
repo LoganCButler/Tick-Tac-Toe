@@ -9,8 +9,8 @@ namespace AppLogic
 {
     public class Game
     {
-        public string Player1 = "a";
-        public string Player2 = "z";       
+        public string Player1 = "X";
+        public string Player2 = "Y";       
         bool computerPlayer = false; 
 
         bool gameContinue = true;
@@ -48,7 +48,7 @@ namespace AppLogic
 
         private void GetPlayerSetup()
         {
-            Console.WriteLine("Please enter 1 for : Player vs. Player \n Or 2 for : Player vs. Computer");
+            Console.WriteLine("Please enter \n 1 for : Player vs. Player \n     Or\n 2 for : Player vs. Computer");
             
                 var responce = Console.ReadLine().ToString();
                 if (responce == "1")
