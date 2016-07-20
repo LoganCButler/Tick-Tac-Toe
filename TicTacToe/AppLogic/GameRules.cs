@@ -137,7 +137,7 @@ namespace AppLogic
                 }
                 else
                 {
-                    Console.WriteLine("Choose another cell");
+                    Console.WriteLine("Space {0} is taken, choose another cell {1}", cell, playerLetter);
                     playMakeMove(Convert.ToInt16(Console.ReadLine()),playerLetter);
                 }
             }

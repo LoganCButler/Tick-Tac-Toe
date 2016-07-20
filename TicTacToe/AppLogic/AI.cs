@@ -23,26 +23,10 @@ namespace AppLogic
         public List<int> scores = new List<int>();
         List<int> moves = new List<int>();
 
-        public int[,] winningLines = new int[8,3]{ 
-                                    //H1
-                                    { 0, 1, 2 }, 
-                                    //H2
-                                    { 3, 4, 5 },
-                                    //H3
-                                    { 6, 7, 8 }, 
-
-                                    //V1
-                                    { 0, 3, 6 },
-                                    //V2       
-                                    { 1, 4, 7 }, 
-                                    //V3
-                                    { 2, 5, 8 },
-
-                                    //DNeg
-                                    { 0, 4, 8 }, 
-                                    //DPpos
-                                    { 2, 4, 6 }
-                               };
+        public int[,] winningLines = new int[8,3]
+            { 
+              { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 }, { 0, 3, 6 },{ 1, 4, 7 }, { 2, 5, 8 },{ 0, 4, 8 }, { 2, 4, 6 }
+            };
 
         public int GetComputerMove(string[] currentBoard, string playerLetter, int moveCount)
         {
@@ -50,15 +34,15 @@ namespace AppLogic
             if (currentBoard[centerSquare] == player1 && moveCount == 1)
             {
                 computerBestMoveToMake = 0;
+                Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
                 return computerBestMoveToMake+1;
             }
-
-            
 
             // opponent has set up a forking move, fiol thier plan.
             if (CheckForFork(currentBoard, moveCount))
             {
                 computerBestMoveToMake = BlockFork(currentBoard);
+                Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
                 return computerBestMoveToMake+1;
             }
 
@@ -66,8 +50,18 @@ namespace AppLogic
             if (currentBoard[centerSquare] != player1 && currentBoard[centerSquare] != player2)
             {
                 computerBestMoveToMake = centerSquare;
-            }           
-
+                Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
+                return computerBestMoveToMake + 1;
+            }
+            //Must Play a Block
+            if (OpponentIsAboutToWin(switchPiece(playerLetter)) && OpponentIsAboutToWin(playerLetter) == false)
+            {
+                BlockAWinningMove(currentBoard, playerLetter);
+                Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
+                scores.Clear();
+                moves.Clear();
+                return computerBestMoveToMake + 1;
+            }
             // run MinMax to find best move, take best move. 
             else
             {
@@ -79,12 +73,7 @@ namespace AppLogic
                 moves.Clear();
             }
 
-            //Must Play a Block
-            if (OpponentIsAboutToWin(switchPiece(playerLetter)) && OpponentIsAboutToWin(playerLetter)==false)
-            {
-                BlockAWinningMove(currentBoard, playerLetter);
-                return computerBestMoveToMake + 1;
-            }
+            
 
             return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
 
@@ -188,14 +177,29 @@ namespace AppLogic
         //MinMax does not block a fork well, this mothod does. 
         private bool CheckForFork(string[] currentBoard, int movecounter)
         {
+            //Diagonal For
             if (currentBoard[0] == player1 && currentBoard[8] == player1 && movecounter == 3) { return true; }
             if (currentBoard[2] == player1 && currentBoard[6] == player1 && movecounter == 3) { return true; }
+
+            //Cornner Fork
+            if (currentBoard[1] == player1 && currentBoard[5] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[5] == player1 && currentBoard[7] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[7] == player1 && currentBoard[3] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[3] == player1 && currentBoard[1] == player1 && movecounter == 3) { return true; }
+
             else { return false; }
         }
         private int BlockFork(string[] currentBoard)
         {
+            //Diagonal Responce
             if (currentBoard[0] == player1 && currentBoard[8] == player1) { return 5; }
             if (currentBoard[2] == player1 && currentBoard[6] == player1) { return 1; }
+
+            //Cornner Fork
+            if (currentBoard[1] == player1 && currentBoard[5] == player1 ) { return 2; }
+            if (currentBoard[5] == player1 && currentBoard[7] == player1 ) { return 8; }
+            if (currentBoard[7] == player1 && currentBoard[3] == player1 ) { return 6; }
+            if (currentBoard[3] == player1 && currentBoard[1] == player1 ) { return 0; } 
             else return -1;
         }
   
@@ -208,14 +212,14 @@ namespace AppLogic
         {
             if (checkGameWin(Grid, GameManager.GameInstance.Player1)) // user/player1wins the game
             {
-                var score = -100 + node;
+                var score = 100 - node;
                 //var score = -10;
                 var moveScore = score;
                 return moveScore;
             }
             else if (checkGameWin(Grid, GameManager.GameInstance.Player2)) // computer/player2 wins the game
             {
-                var score = 100 - node;
+                var score = -100 + node;
                 //var score = 10;
                 var moveScore = score;
                 return moveScore;
