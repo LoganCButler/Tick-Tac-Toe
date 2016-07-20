@@ -42,10 +42,10 @@ namespace AppLogic
         //List of Tally List
         public List<List<int>> ReturnTallyList(string player)
         {
-            switch (player)
-            {
-                case "X":
-                List<List<int>> xTallyLists = new List<List<int>>();
+           
+                if (GameManager.GameInstance.Player1 == player)
+                {
+                    List<List<int>> xTallyLists = new List<List<int>>();
                     xTallyLists.Add(xWinsH1);
                     xTallyLists.Add(xWinsH2);
                     xTallyLists.Add(xWinsH3);
@@ -55,7 +55,9 @@ namespace AppLogic
                     xTallyLists.Add(xWinsDNeg);
                     xTallyLists.Add(xWinsDPos);
                     return xTallyLists;
-                case "O":
+                }   
+                else
+                {
                     List<List<int>> oTallyLists = new List<List<int>>();
                     oTallyLists.Add(oWinsH1);
                     oTallyLists.Add(oWinsH2);
@@ -66,10 +68,11 @@ namespace AppLogic
                     oTallyLists.Add(oWinsDNeg);
                     oTallyLists.Add(oWinsDPos);
                     return oTallyLists;
-                default:
-                    break;
-            }
-            return null;  
+                }
+            
+
+                   
+
         }
               
         public void TallyScore(int cell, string player)
