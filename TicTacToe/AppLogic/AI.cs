@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace AppLogic
 {
-    
-
-    
-
     public class AI
     {
         string player1 = GameManager.GameInstance.Player1;
@@ -17,7 +13,6 @@ namespace AppLogic
 
         int computerBestMoveToMake = 0;
         public int numberOfTurns = 0;
-        public string currentPlayer = "O";
         public List<int> scores = new List<int>();
         List<int> moves = new List<int>();
 
@@ -45,7 +40,7 @@ namespace AppLogic
         public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
         {
 
-            if (currentBoard[4] == "X" && moveCount == 1)
+            if (currentBoard[4] == player1 && moveCount == 1)
             {
                 computerBestMoveToMake = 0;
                 return computerBestMoveToMake+1;
@@ -55,7 +50,7 @@ namespace AppLogic
                 computerBestMoveToMake = BlockFork(currentBoard);
                 return computerBestMoveToMake+1;
             }
-            if (currentBoard[4] != "X" && currentBoard[4] != "O")
+            if (currentBoard[4] != player1 && currentBoard[4] != player2)
             {
                 computerBestMoveToMake = 4;
             }           
@@ -67,11 +62,7 @@ namespace AppLogic
 
             }
 
-
-
-            return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
-
-       
+            return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index      
         }
 
         private bool CheckForFork(string[] currentBoard, int movecounter)
@@ -130,7 +121,6 @@ namespace AppLogic
                     oponent = playerLetter;
                     checkThreshold = 1;
                     break;
-
             }
 
             for (var i = 7; i > -1; i--)
@@ -185,23 +175,16 @@ namespace AppLogic
 
         }
 
- 
-
-
-
-
         private static string switchPiece(string player)
-        {
-            switch (player)
+        {        
+                if (player == GameManager.GameInstance.Player1)
             {
-                case "X":
-                    return "O";
-                case "O":
-                    return "X";
-                default:
-                    return GameManager.AIInstance.currentPlayer;
+                return GameManager.GameInstance.Player2;
             }
-                
+                else
+            {
+                return GameManager.GameInstance.Player1;
+            }             
         }
 
      
@@ -210,7 +193,7 @@ namespace AppLogic
         {
             for (var i= 0; i < 9; i++) 
             {
-                if (board[i] != "X" && board[i] != "O")
+                if (board[i] != GameManager.GameInstance.Player1 && board[i] != GameManager.GameInstance.Player2)
                 {
                     return false;
                 }
