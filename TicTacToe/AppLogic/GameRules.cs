@@ -96,7 +96,7 @@ namespace AppLogic
                 if (computerPlayer)
                 {
                     Console.WriteLine("The Computer will now play it's move.");
-                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, Player2, Player1, moveCounter), Player2); 
+                    playMakeMove(GameManager.AIInstance.GetComputerMove(board, Player2, moveCounter), Player2); 
                 }
                 else
                 {

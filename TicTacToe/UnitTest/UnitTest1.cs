@@ -7,45 +7,38 @@ namespace UnitTest
     [TestClass]
     public class UnitTest1
     {
+
         [TestMethod]
-        public void xWins()
+        public void MinMaxBGlocksAForceBlock()
         {
-            //Set up
+            //Set 
             var game = GameManager.GameInstance;
             var score = GameManager.ScoreInstance;
+            var AI = GameManager.AIInstance;
+            string[] board = new string[] { "a", "2", "3", "4", "z", "6", "a", "8", "9" };
 
             //run
-            game.playMakeMove(1, "X");
-            game.playMakeMove(4, "O");
-            game.playMakeMove(2, "X");
-            game.playMakeMove(5, "O");
-            game.playMakeMove(3, "X");
+            AI.GetComputerMove(board, game.Player2,0);
+
 
             //Assert
-            Assert.IsTrue(score.CheckForPlayerWin("X"));
-            Assert.IsFalse(score.CheckForPlayerWin("O"));
+            Assert.AreEqual(3, AI.computerBestMoveToMake);
         }
+
         [TestMethod]
-        public void ComputerPlaysAWinningMove()
+        public void MinMaxTakesAWin()
         {
             //Set up
             var game = GameManager.GameInstance;
             var score = GameManager.ScoreInstance;
             var AI = GameManager.AIInstance;
+            string[] board = new string[] { "a", "a", "3", "z", "z", "6", "a", "8", "9" };
 
             //run
-            game.playMakeMove(1,"X");
-            game.playMakeMove(4,"O");
-            game.playMakeMove(2,"X");
-            game.playMakeMove(5,"O");
-            game.playMakeMove(7,"X");
-            //game.playMakeMove(AI.GetComputerMove(game.moveAvailable, "O", "X"), "O"); // lets the computer pick a move
-
+            AI.GetComputerMove(board, game.Player2, 0);
 
             //Assert
-            Assert.IsTrue(score.CheckForPlayerWin("O"));
-            Assert.IsFalse(score.CheckForPlayerWin("X"));
-
+            Assert.AreEqual(5, AI.computerBestMoveToMake);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace AppLogic
         int centerSquare = 4;
 
 
-        int computerBestMoveToMake = 0;
+        public int computerBestMoveToMake = 0;
         public int numberOfTurns = 0;
         public string currentPlayer = GameManager.GameInstance.Player2;
         public List<int> scores = new List<int>();
@@ -44,7 +44,7 @@ namespace AppLogic
                                     { 2, 4, 6 }
                                };
 
-        public int GetComputerMove(string[] currentBoard, string playerLetter, string oponentLetter, int moveCount)
+        public int GetComputerMove(string[] currentBoard, string playerLetter, int moveCount)
         {
             //opponent opening move was center scquare , play the corner square.
             if (currentBoard[centerSquare] == player1 && moveCount == 1)
@@ -52,6 +52,8 @@ namespace AppLogic
                 computerBestMoveToMake = 0;
                 return computerBestMoveToMake+1;
             }
+
+            
 
             // opponent has set up a forking move, fiol thier plan.
             if (CheckForFork(currentBoard, moveCount))
@@ -70,97 +72,168 @@ namespace AppLogic
             else
             {
                 var node = 0;
-                minimax(cloneGrid(currentBoard), playerLetter, node);
+                minimaxOff(cloneGrid(currentBoard), playerLetter, node);
                 //pickAndSetWinningMove();
                 Console.WriteLine(string.Format("The Computer choses: spot {0}", computerBestMoveToMake + 1));
                 scores.Clear();
                 moves.Clear();
             }
 
-
+            //Must Play a Block
+            if (OpponentIsAboutToWin(switchPiece(playerLetter)) && OpponentIsAboutToWin(playerLetter)==false)
+            {
+                BlockAWinningMove(currentBoard, playerLetter);
+                return computerBestMoveToMake + 1;
+            }
 
             return computerBestMoveToMake + 1; //making the move takes integers in a 1 bassed index
 
        
         }
 
-        private void pickAndSetWinningMove()
+        private bool OpponentIsAboutToWin(string player)
         {
-            List<int> MaxMoveScoreTies = new List<int> { };
-
-            for (var i = 0; i < scores.Count(); i++)
-            {
-                if (scores.Max() == scores[i])
+            if (GameManager.ScoreInstance.CheckForPlayerAlmostWin(player))
                 {
-                    MaxMoveScoreTies.Add(moves[i]);
+                    return true;
                 }
-            }
-            //sorts the list and gets the move that has the highest score and most options. 
-            int BestBestMove = MaxMoveScoreTies.GroupBy(v => v)
-                .OrderByDescending(g => g.Count())
-                .First()
-                .Key;
-
-            computerBestMoveToMake = BestBestMove;
+            return false;
         }
 
+        private void BlockAWinningMove(string[] currentBoard, string player)
+        {
+            minimaxDef(currentBoard, player, 0);
+        }
+
+        public int minimaxOff(string[] InputGrid, string player, int nodeCount)
+        {
+            string[] Grid = cloneGrid(InputGrid);//make a copy of the current board to manipulate
+
+            if (checkScore(Grid, nodeCount) != 0) // check if the game is over and someone won
+            {
+                return checkScore(Grid, nodeCount); // return +10-turns for win -10+turns for a loss
+            }
+            else if (checkGameEnd(InputGrid)) // check for a filled board (no more spots available and no win)
+            {
+                return 0; // tie game and score is 0
+            }
+
+
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (InputGrid[i] != player1 && InputGrid[i] != player2)
+                {
+                    scores.Add(minimaxOff(makeGridMove(Grid, player, i), switchPiece(player), nodeCount + 1));
+                    moves.Add(i);
+                }
+
+            }
+
+
+            if (player == player1)
+            {
+                //int MaxScoreIndex = scores.IndexOf(scores.Max());
+                computerBestMoveToMake = GetModeForMaxScore(scores, moves);
+                return scores.Max();
+            }
+            else
+            {
+                // int MinScoreIndex = scores.IndexOf(scores.Min());
+                computerBestMoveToMake = GetModeForMinScore(scores, moves);
+                return scores.Min();
+            }
+        }
+        public int minimaxDef(string[] InputGrid, string player, int nodeCount)
+        {
+            string[] Grid = cloneGrid(InputGrid);//make a copy of the current board to manipulate
+
+            if (checkScore(Grid, nodeCount) != 0) // check if the game is over and someone won
+            {
+                return checkScore(Grid, nodeCount); // return +10-turns for win -10+turns for a loss
+            }
+            else if (checkGameEnd(InputGrid)) // check for a filled board (no more spots available and no win)
+            {
+                return 0; // tie game and score is 0
+            }
+
+
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (InputGrid[i] != player1 && InputGrid[i] != player2)
+                {
+                    scores.Add(minimaxOff(makeGridMove(Grid, player, i), switchPiece(player), nodeCount + 1));
+                    moves.Add(i);
+                }
+
+            }
+
+
+            if (player == player2)
+            {
+                //int MaxScoreIndex = scores.IndexOf(scores.Max());
+                computerBestMoveToMake = GetModeForMaxScore(scores, moves);
+                return scores.Max();
+            }
+            else
+            {
+                // int MinScoreIndex = scores.IndexOf(scores.Min());
+                computerBestMoveToMake = GetModeForMinScore(scores, moves);
+                return scores.Min();
+            }
+        }
+
+
+        //MinMax does not block a fork well, this mothod does. 
+        private bool CheckForFork(string[] currentBoard, int movecounter)
+        {
+            if (currentBoard[0] == player1 && currentBoard[8] == player1 && movecounter == 3) { return true; }
+            if (currentBoard[2] == player1 && currentBoard[6] == player1 && movecounter == 3) { return true; }
+            else { return false; }
+        }
         private int BlockFork(string[] currentBoard)
         {
             if (currentBoard[0] == player1 && currentBoard[8] == player1) { return 5; }
             if (currentBoard[2] == player1 && currentBoard[6] == player1) { return 1; }
             else return -1;
         }
-        private bool CheckForFork(string[] currentBoard, int movecounter)
-        {
-            if (currentBoard[0]==player1 && currentBoard[8] == player1 && movecounter==3) { return true; }
-            if (currentBoard[2] == player1 && currentBoard[6] == player1 && movecounter == 3) { return true; }
-            else { return false; }
-        }
+  
 
 
 
-        static string[] cloneGrid(string[] inputBoard)
-        {
-            string[] cloneGrid = new string[9];
-            for ( var i=0; i < 9; i++)
-            {
-                cloneGrid[i] = inputBoard[i];
-            }
-            return cloneGrid;
-        }
-
+       
+        //returns minmax score for a completed board
         static int checkScore(string[] Grid, int node)
         {
-            if (checkGameWin(Grid, GameManager.GameInstance.Player1))
+            if (checkGameWin(Grid, GameManager.GameInstance.Player1)) // user/player1wins the game
             {
-                var score = -10 + node;
+                var score = -100 + node;
+                //var score = -10;
                 var moveScore = score;
                 return moveScore;
             }
-            else if (checkGameWin(Grid, GameManager.GameInstance.Player2))
+            else if (checkGameWin(Grid, GameManager.GameInstance.Player2)) // computer/player2 wins the game
             {
-                var score = +20 - node;
+                var score = 100 - node;
+                //var score = 10;
                 var moveScore = score;
                 return moveScore;
             }
             else return 0;
         }
 
-        private static string switchPiece(string player)
+        //Makes a copy of the board so the game board is not changed.
+        static string[] cloneGrid(string[] inputBoard)
         {
-
-            if (player == GameManager.GameInstance.Player1) {
-                return GameManager.GameInstance.Player2;
+            string[] cloneGrid = new string[9];
+            for (var i = 0; i < 9; i++)
+            {
+                cloneGrid[i] = inputBoard[i];
             }
-            else
-            { 
-                    return GameManager.GameInstance.Player1;
-            }
-               
-            
-                
+            return cloneGrid;
         }
-
+        // checks a player has won
         static bool checkGameWin(string[] Grid, string player)
         {
             for (int i = 0; i < 8; i++)
@@ -177,8 +250,8 @@ namespace AppLogic
             }
             return false;
         }
-
-        static bool checkGameEnd(string[] board) // checks if the board game is filled up. 
+        // checks if the board game is filled up.
+        static bool checkGameEnd(string[] board)  
         {
             for (var i= 0; i < 9; i++) 
             {
@@ -189,47 +262,22 @@ namespace AppLogic
             }
             return true;
         }
-
-        int minimax(string[] InputGrid, string player, int nodeCount)
+        private static string switchPiece(string player)
         {
-            string[] Grid = cloneGrid(InputGrid);//make a copy of the current board to manipulate
 
-            if (checkScore(Grid, nodeCount) != 0) // check if the game is over and someone won
+            if (player == GameManager.GameInstance.Player1)
             {
-                return checkScore(Grid, nodeCount); // return +10-turns for win -10+turns for a loss
-            }
-            else if (checkGameEnd(InputGrid)) // check for a filled board (no more spots available and no win)
-            {
-                return 0; // tie game and score is 0
-            }
-
-            
-
-            for (int i = 0; i < 9; i++)
-            {
-                if (InputGrid[i] != player1 && InputGrid[i] != player2)
-                {                    
-                    scores.Add(minimax(makeGridMove(Grid, player, i), switchPiece(player), nodeCount + 1));
-                    moves.Add(i);                  
-                }
-                
-            }
-
-
-                if (player == player1)
-            {
-                computerBestMoveToMake = GetModeForMaxScore(scores, moves);
-                //return computerBestMoveToMake;
-                return 0;
+                return GameManager.GameInstance.Player2;
             }
             else
             {
-                computerBestMoveToMake = GetModeForMinScore(scores, moves);
-                //return GetModeForMinScore(scores, moves);
-                //return computerBestMoveToMake;
-                return 0;
+                return GameManager.GameInstance.Player1;
             }
+
+
+
         }
+
 
 
         /// Method to take all moves for tying Max scores. Then selecting the mode of the moves. 

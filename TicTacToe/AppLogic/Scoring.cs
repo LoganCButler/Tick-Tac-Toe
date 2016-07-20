@@ -13,6 +13,7 @@ namespace AppLogic
         string player1 = GameManager.GameInstance.Player1;
         string player2 = GameManager.GameInstance.Player2;
         int movesToWin = 3;
+        int oneMoveToWin = 2;
 
         //p1  horizontal win
         public List<int> xWinsH1 = new List<int>();
@@ -217,6 +218,18 @@ namespace AppLogic
             }
 
             return aRowHasWon;
+        }
+
+        public bool CheckForPlayerAlmostWin(string playerLetter)
+        {
+            bool aRowHasAlmostWon = false;
+
+            foreach (var list in ReturnTallyList(playerLetter))
+            {
+                if (list.Count() == oneMoveToWin) { aRowHasAlmostWon = true; }
+            }
+
+            return aRowHasAlmostWon;
         }
     }
 }
