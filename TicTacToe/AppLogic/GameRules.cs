@@ -42,7 +42,7 @@ namespace AppLogic
 
         private void PrintGameBoard()
         {
-            Console.WriteLine("\n {0} | {1} | {2} \n-----------\n {3} | {4} | {5} \n-----------\n {6} | {7} | {8} \n", board[0], board[1], board[2], board[3], board[4], board[5], board[6], board[7], board[8]);
+            Console.WriteLine("\n\n\n {0} | {1} | {2} \n-----------\n {3} | {4} | {5} \n-----------\n {6} | {7} | {8} \n", board[0], board[1], board[2], board[3], board[4], board[5], board[6], board[7], board[8]);
         }
 
         private void playPrompt(string playerLetter)
